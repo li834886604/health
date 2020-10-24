@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace属性：名称空间， 写接口的全限定名-->
+<mapper namespace="com.llt.health.dao.CheckItemDao">
+
+    <!--select标签用于插叙；  id属性值就是接口的方法名，
+        resultType ：返回值的类型
+                    如果是集合，写泛型即可；
+    -->
+    <select id="findAll" resultType="com.llt.health.pojo.CheckItem">
+        <!-- 查询语句-->
+        select * from t_checkitem
+    </select>
+
+
+    <insert id="add" parameterType="com.llt.health.pojo.CheckItem">
+  insert into t_checkitem(code,name,sex,age,price,type,remark,attention)
+        values
+        (#{code},#{name},#{sex},#{age},#{price},#{type},#{remark},#{attention})
+
+    </insert>
+
+    <select id="findPage"   parameterType="String"   resultType="CheckItem">
+        select * From t_checkitem
+        <if test="value !=null and value.length > 0">
+            where code like #{value} or name like #{value}
+        </if>
+
+        <!-- Mybatis 动态参数赋值 DynamicContext
+<if>标签里的变量，如果参数类型是基本数据类型，只能用 value 或 _parameter，这个是由它的底层ognl表达式决定的。如果参数类型是对象类型，则可以填它的属性。另外，使用#的参数可以是形参名也可以是value
+-->
+    </select>
+
+    <select id="findCountByCheckitemId" parameterType="int" resultType="int">
+        select count(1) from t_checkgroup_checkitem where checkitem_id=#{id}
+    </select>
+
+    <delete id="delete" parameterType="int">
+        delete from t_checkitem where  id=#{id}
+    </delete>
+</mapper>

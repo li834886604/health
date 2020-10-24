@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+<!--    数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="password" value="root"/>
+        <property name="username" value="root"/>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql:///health?characterEncoding=utf8"/>
+    </bean>
+<!--    sqlSessionFactory工厂-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+
+<!--       别名扫描-->
+        <property name="typeAliasesPackage" value="com.llt.health.pojo"/>
+
+<!--        导入mybatis的配置-->
+        <property name="configLocation" value="classpath:sqlMapConfig.xml"/>
+
+    </bean>
+<!--    dao接口扫描-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.llt.health.dao"/>
+    </bean>
+
+
+</beans>
