@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace属性：名称空间， 写接口的全限定名-->
+<mapper namespace="com.llt.health.dao.CheckgroupDao">
+
+    <!--select标签用于插叙；  id属性值就是接口的方法名，
+        resultType ：返回值的类型
+                    如果是集合，写泛型即可；
+    -->
+   <insert id="add" parameterType="CheckGroup">
+    <selectKey resultType="int" keyProperty="id" order="AFTER">
+        select last_insert_id()
+    </selectKey>
+    insert into t_checkgroup (
+       code,
+       name,
+       helpCode,
+       sex,
+       remark,
+       attention) values
+       (
+
+       #{code},
+       #{name},
+       #{helpCode},
+       #{sex},
+       #{remark},
+       #{attention}
+       )
+
+   </insert>
+
+    <insert id="addCheckItemIdAndGroupId" parameterType="int">
+        insert into t_checkgroup_checkitem (checkgroup_id,checkitem_id)
+        values(#{groupId},#{checkitemId})
+
+    </insert>
+
+
+    <select id="findPage" resultType="CheckGroup" parameterType="String">
+        select * from t_checkgroup
+        <if test="value != null and value.length>0"  >
+        <where>
+            where code like #{value} or name like #{value} or helpCode like #{value}
+        </where>
+
+        </if>
+    </select>
+    <!--    findById-->
+    <select id="findById" parameterType="int" resultType="CheckGroup">
+       select * From t_checkgroup where id=#{checkGroupId}
+    </select>
+
+    <!--
+
+                编辑: 查询已选中的检查项
+    -->
+    <select id="findCheckItemIdsByCheckGroupId" parameterType="int" resultType="int">
+            select checkitem_id from t_checkgroup_checkitem where checkgroup_id=#{checkGroupId}
+    </select>
+
+<!--
+        编辑:更新检查组
+-->
+    <update id="update" parameterType="CheckGroup">
+         update t_checkgroup
+        set
+            code=#{code},
+            name=#{name},
+            helpCode=#{helpCode},
+            sex=#{sex},
+            remark=#{remark},
+            attention=#{attention}
+        where id=#{id}
+    </update>
+
+<!--
+         编辑:删除检查组和检查项关系
+-->
+    <delete id="deleteCheckGroupCheckItem" parameterType="int">
+        delete from t_checkgroup_checkitem where checkgroup_id =#{id}
+    </delete>
+<!--
+      编辑:插入新的关系
+-->
+
+    <insert id="addCheckGroupCheckItem" parameterType="int">
+        insert into t_checkgroup_checkitem checkgroup_id,checkitem_id
+        values(#{id},#{checkitemId})
+
+
+    </insert>
+
+<!--
+      编辑:删除检查组
+-->
+    <select id="findSetmealCountByCheckGroupId" resultType="int" parameterType="int">
+         select count(1) from t_setmeal_checkgroup where checkgroup_id=#{id}
+    </select>
+
+
+<!--
+        //删除与检查项管理的数据
+-->
+    <delete id="deletedeleteCheckGroupCheckItem" parameterType="int">
+        delete from  t_checkgroup_checkitem  where checkgroup_id = #{id}
+    </delete>
+<!--
+        //删除检查组
+-->
+    <delete id="deleteById" parameterType="int">
+        delete from t_checkgroup where id =#{id}
+    </delete>
+</mapper>

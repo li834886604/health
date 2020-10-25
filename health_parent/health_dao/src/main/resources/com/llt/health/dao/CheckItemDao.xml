@@ -40,4 +40,28 @@
     <delete id="delete" parameterType="int">
         delete from t_checkitem where  id=#{id}
     </delete>
+
+<!--   根基id查询  回显数据-->
+
+    <select id="findById" parameterType="int" resultType="CheckItem">
+        select * from t_checkitem where id=#{id}
+    </select>
+
+
+<!--    编辑更新数据-->
+    <update id="update" parameterType="CheckItem">
+        update t_checkitem set
+
+        code=#{code},
+        name=#{name},
+        sex=#{sex},
+        age=#{age},
+        price=#{price},
+       type= #{type},
+        remark=#{remark},
+       attention= #{attention}
+       where id=#{id}
+    </update>
+
+
 </mapper>

@@ -58,21 +58,55 @@ public class CheckItemServiceImpl implements CheckItemService {
         PageResult<CheckItem> pageResult = new PageResult<>(page.getTotal(), page.getResult());
         return pageResult;
     }
-
     /**
      * 删除检查项
      * @param id
      */
+    @Override
+    public void deleteById(Integer id) {
+        int cnt =checkItemDao.findCountByCheckitemId(id);
+
+        if(cnt>0){
+            //已经被检查组使用了 ,则不能删除,报错
+            throw  new MyException("该检查项已经被使用了,不能删除");
+
+        }
+        checkItemDao.delete(id);
+    }
+
+    /**
+     * 根基id查询  回显数据
+     * @param id
+     * @return
+     */
+    @Override
+    public CheckItem findById(int id) {
+        CheckItem checkItem=checkItemDao.findById(id);
+
+        return checkItem;
+    }
+
+    /**
+     * 编辑更新数据
+     * @param checkItem
+     */
 
     @Override
-    public void deleteById(int id) {
-       int cnt =checkItemDao.findCountByCheckitemId(id);
+    public void update(CheckItem checkItem) {
+        checkItemDao.update(checkItem);
 
-       if(cnt>0){
-            //已经被检查组使用了 ,则不能删除,报错
-           throw  new MyException("该检查项已经被使用了,不能删除");
-
-       }
-       checkItemDao.delete(id);
     }
+
+
+//    @Override
+//    public void deleteById(int id) {
+//       int cnt =checkItemDao.findCountByCheckitemId(id);
+//
+//       if(cnt>0){
+//            //已经被检查组使用了 ,则不能删除,报错
+//           throw  new MyException("该检查项已经被使用了,不能删除");
+//
+//       }
+//       checkItemDao.delete(id);
+//    }
 }

@@ -37,4 +37,17 @@ public interface CheckItemDao {
      * @param id
      */
     void delete(int id);
+
+    /**
+     * 根基id查询  回显数据
+     * @param id
+     * @return
+     */
+    CheckItem findById(int id);
+
+    /**
+     * 编辑更新数据
+     * @param checkItem
+     */
+    void update(CheckItem checkItem);
 }

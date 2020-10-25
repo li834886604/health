@@ -9,10 +9,7 @@ import com.llt.health.pojo.CheckItem;
 import com.llt.health.pojo.PageResult;
 import com.llt.health.service.CheckItemService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.awt.geom.FlatteningPathIterator;
 import java.util.List;
@@ -66,6 +63,26 @@ public class CheckitemController {
     public Result deleteById( int id) {
        checkItemService.deleteById(id);
     return new Result(true ,MessageConstant.DELETE_CHECKITEM_SUCCESS);
+   }
+    /**
+     * 根基id查询  回显数据
+     */
+   @GetMapping("/findById")
+    public Result findById(int id){
+       CheckItem checkItem=checkItemService.findById(id);
+
+       return new Result(true, MessageConstant.QUERY_CHECKITEM_SUCCESS,checkItem);
+   }
+
+    /**
+     * 编辑更新数据
+     * @param checkItem
+     * @return
+     */
+   @PostMapping("/update")
+    public Result update(@RequestBody CheckItem checkItem){
+       checkItemService.update(checkItem);
+       return new Result(true,MessageConstant.EDIT_CHECKITEM_SUCCESS);
    }
 
 
